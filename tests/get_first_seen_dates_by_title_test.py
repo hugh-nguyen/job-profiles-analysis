@@ -94,8 +94,6 @@ def test_get_first_seen_dates_by_title(spark):
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
-    result.show()
-    expected.show()
 
     assert result.subtract(expected).count() == 0
     assert expected.subtract(result).count() == 0

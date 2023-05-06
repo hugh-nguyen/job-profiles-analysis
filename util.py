@@ -101,3 +101,19 @@ def get_most_popular_job_titles(df, year=None):
     result = title_first_seen_dates.join(title_counts, 'title', 'inner')
     
     return result.orderBy(desc('occurrence'))
+
+
+def get_all_current_jobs(df):
+    return df.where(isnull(col('jobDetail.toDate')))
+
+
+def get_most_recent_jobs_by_profile(df):
+
+    df_max_dates = df.groupBy('id') \
+        .agg(max('jobDetail.fromDate').alias('maxFromDate'))
+
+    result = df.join(df_max_dates, on=['id']) \
+        .where(col('jobDetail.fromDate') == col('maxFromDate')) \
+        .select('id', 'firstName', 'lastName', 'jobDetail')
+    
+    return result

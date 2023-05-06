@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, isnull, sum
 from util import (
     get_flattened_job_profile_data,
-    get_current_salaries_by_profile
+    get_most_recent_jobs_by_profile
 )
 
 
@@ -14,9 +14,29 @@ def spark():
     spark.stop()
 
 
-def test_get_current_salaries_by_profile_simple(spark):
+base_data = [
+    {
+        'id': 'da312',
+        'profile': {
+            'firstName': 'Moon',
+            'lastName': 'Yong',
+            'jobHistory': [
+                {
+                    'title': 'dentist',
+                    'location': 'Perth',
+                    'salary': 104000,
+                    'fromDate': '2012-08-08',
+                    'toDate': '2019-01-01'
+                }
+            ]
+        }
+    }
+]
 
-    data = [
+
+def test_get_most_recent_jobs_by_profile_with_one_current_job(spark):
+
+    data = base_data + [
         {
             'id': 'da313',
             'profile': {
@@ -28,13 +48,6 @@ def test_get_current_salaries_by_profile_simple(spark):
                         'location': 'Perth',
                         'salary': 104000,
                         'fromDate': '2019-08-08',
-                    },
-                    {
-                        'title': 'dentist',
-                        'location': 'Perth',
-                        'salary': 10000,
-                        'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
                     }
                 ]
             }
@@ -44,15 +57,32 @@ def test_get_current_salaries_by_profile_simple(spark):
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
-    
-    result = get_current_salaries_by_profile(df)
+
+    result = get_most_recent_jobs_by_profile(df)
 
     expected_data = [
+        {
+            'id': 'da312',
+            'firstName': 'Moon',
+            'lastName': 'Yong',
+            'jobDetail': {
+                'title': 'dentist',
+                'location': 'Perth',
+                'salary': 104000,
+                'fromDate': '2012-08-08',
+                'toDate': '2019-01-01'
+            }
+        },
         {
             'id': 'da313',
             'firstName': 'Daniel',
             'lastName': 'Doe',
-            'currentSalary': 104000
+            'jobDetail': {
+                'title': 'dentist',
+                'location': 'Perth',
+                'salary': 104000,
+                'fromDate': '2019-08-08',
+            }
         }
     ]
 
@@ -62,9 +92,9 @@ def test_get_current_salaries_by_profile_simple(spark):
     assert expected.subtract(result).count() == 0
 
 
-def test_get_current_salaries_by_profile_where_profile_has_no_current_job(spark):
+def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs(spark):
 
-    data = [
+    data = base_data + [
         {
             'id': 'da313',
             'profile': {
@@ -75,37 +105,13 @@ def test_get_current_salaries_by_profile_where_profile_has_no_current_job(spark)
                         'title': 'dentist',
                         'location': 'Perth',
                         'salary': 104000,
-                        'fromDate': '2019-80-08',
+                        'fromDate': '2019-08-08',
                     },
                     {
                         'title': 'dentist',
                         'location': 'Perth',
-                        'salary': 10000,
-                        'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
-        },
-        {
-            'id': 'da314',
-            'profile': {
-                'firstName': 'Joe',
-                'lastName': 'Chain',
-                'jobHistory': [
-                    {
-                        'title': 'clerk',
-                        'location': 'Perth',
-                        'salary': 101200,
-                        'fromDate': '2019-08-08',
-                        'toDate': '2019-08-08'
-                    },
-                    {
-                        'title': 'store clerk',
-                        'location': 'Perth',
                         'salary': 104000,
-                        'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'fromDate': '2019-07-08',
                     }
                 ]
             }
@@ -115,15 +121,32 @@ def test_get_current_salaries_by_profile_where_profile_has_no_current_job(spark)
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
-    
-    result = get_current_salaries_by_profile(df)
+
+    result = get_most_recent_jobs_by_profile(df)
 
     expected_data = [
+        {
+            'id': 'da312',
+            'firstName': 'Moon',
+            'lastName': 'Yong',
+            'jobDetail': {
+                'title': 'dentist',
+                'location': 'Perth',
+                'salary': 104000,
+                'fromDate': '2012-08-08',
+                'toDate': '2019-01-01'
+            }
+        },
         {
             'id': 'da313',
             'firstName': 'Daniel',
             'lastName': 'Doe',
-            'currentSalary': 104000
+            'jobDetail': {
+                'title': 'dentist',
+                'location': 'Perth',
+                'salary': 104000,
+                'fromDate': '2019-08-08',
+            }
         }
     ]
 
@@ -133,9 +156,9 @@ def test_get_current_salaries_by_profile_where_profile_has_no_current_job(spark)
     assert expected.subtract(result).count() == 0
 
 
-def test_get_current_salaries_by_profile_where_profile_has_multiple_current_jobs(spark):
+def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs_single_finsished_job(spark):
 
-    data = [
+    data = base_data + [
         {
             'id': 'da313',
             'profile': {
@@ -146,35 +169,20 @@ def test_get_current_salaries_by_profile_where_profile_has_multiple_current_jobs
                         'title': 'dentist',
                         'location': 'Perth',
                         'salary': 104000,
-                        'fromDate': '2019-80-08',
+                        'fromDate': '2019-09-08',
+                        'toDate': '2019-09-08',
                     },
                     {
                         'title': 'dentist',
                         'location': 'Perth',
-                        'salary': 10000,
-                        'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
-        },
-        {
-            'id': 'da314',
-            'profile': {
-                'firstName': 'Joe',
-                'lastName': 'Chain',
-                'jobHistory': [
-                    {
-                        'title': 'clerk',
-                        'location': 'Perth',
-                        'salary': 101200,
+                        'salary': 104000,
                         'fromDate': '2019-08-08',
                     },
                     {
-                        'title': 'store clerk',
+                        'title': 'dentist',
                         'location': 'Perth',
                         'salary': 104000,
-                        'fromDate': '2016-02-08',
+                        'fromDate': '2019-07-08',
                     }
                 ]
             }
@@ -184,21 +192,33 @@ def test_get_current_salaries_by_profile_where_profile_has_multiple_current_jobs
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
-    
-    result = get_current_salaries_by_profile(df)
+
+    result = get_most_recent_jobs_by_profile(df)
 
     expected_data = [
+        {
+            'id': 'da312',
+            'firstName': 'Moon',
+            'lastName': 'Yong',
+            'jobDetail': {
+                'title': 'dentist',
+                'location': 'Perth',
+                'salary': 104000,
+                'fromDate': '2012-08-08',
+                'toDate': '2019-01-01'
+            }
+        },
         {
             'id': 'da313',
             'firstName': 'Daniel',
             'lastName': 'Doe',
-            'currentSalary': 104000
-        },
-        {
-            'id': 'da314',
-            'firstName': 'Joe',
-            'lastName': 'Chain',
-            'currentSalary': 205200
+            'jobDetail': {
+                'title': 'dentist',
+                'location': 'Perth',
+                'salary': 104000,
+                'fromDate': '2019-09-08',
+                'toDate': '2019-09-08',
+            }
         }
     ]
 

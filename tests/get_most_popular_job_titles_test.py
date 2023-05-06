@@ -95,7 +95,6 @@ def test_get_most_popular_job_titles_overall(spark):
     df = get_flattened_job_profile_data(df)
 
     result = get_most_popular_job_titles(df)
-    result.show()
     
     expected_data = [
         {
