@@ -1,0 +1,149 @@
+import pytest
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, isnull, sum
+from util import (
+    get_flattened_job_profile_data,
+    get_average_salaries_by_profile
+)
+
+
+@pytest.fixture
+def spark():
+    spark = SparkSession.builder.appName('test').getOrCreate()
+    yield spark
+    spark.stop()
+
+
+def test_get_average_salaries_by_profile_simple(spark):
+
+    data = [
+        {
+            'id': 'da313',
+            'profile': {
+                'firstName': 'Daniel',
+                'lastName': 'Doe',
+                'jobHistory': [
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 104000,
+                        'fromDate': '2019-08-08',
+                    },
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 98000,
+                        'fromDate': '2016-02-08',
+                        'toDate': '2019-08-08'
+                    }
+                ]
+            }
+        }
+    ]
+
+    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    df = get_flattened_job_profile_data(df)
+
+    result = get_average_salaries_by_profile(df)
+
+    expected_data = [
+        {
+            'id': 'da313',
+            'firstName': 'Daniel',
+            'lastName': 'Doe',
+            'avgSalary': 101000.0
+        }
+    ]
+
+    expected = spark.createDataFrame(expected_data, result.schema)
+
+    assert result.subtract(expected).count() == 0
+    assert expected.subtract(result).count() == 0
+
+
+def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
+
+    data = [
+        {
+            'id': 'da313',
+            'profile': {
+                'firstName': 'Jane',
+                'lastName': 'Dee',
+                'jobHistory': [
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 20000,
+                        'fromDate': '2019-08-08',
+                    },
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 30000,
+                        'fromDate': '2016-02-08',
+                        'toDate': '2019-08-08'
+                    },
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 50000,
+                        'fromDate': '2016-02-08',
+                        'toDate': '2019-08-08'
+                    }
+                ]
+            }
+        },
+        {
+            'id': 'da314',
+            'profile': {
+                'firstName': 'John',
+                'lastName': 'Doe',
+                'jobHistory': [
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 10000,
+                        'fromDate': '2019-08-08',
+                    },
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 20000,
+                        'fromDate': '2019-08-08',
+                    },
+                    {
+                        'title': 'dentist',
+                        'location': 'Perth',
+                        'salary': 20000,
+                        'fromDate': '2016-02-08',
+                        'toDate': '2019-08-08'
+                    }
+                ]
+            }
+        }
+    ]
+
+    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    df = get_flattened_job_profile_data(df)
+
+    result = get_average_salaries_by_profile(df)
+
+    expected_data = [
+        {
+            'id': 'da313',
+            'firstName': 'Jane',
+            'lastName': 'Dee',
+            'avgSalary': 33333.33
+        },
+        {
+            'id': 'da314',
+            'firstName': 'John',
+            'lastName': 'Doe',
+            'avgSalary': 16666.67
+        }
+    ]
+
+    expected = spark.createDataFrame(expected_data, result.schema)
+
+    assert result.subtract(expected).count() == 0
+    assert expected.subtract(result).count() == 0
