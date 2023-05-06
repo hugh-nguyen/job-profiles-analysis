@@ -1,10 +1,8 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, isnull, sum
-from util import (
-    get_flattened_job_profile_data,
-    get_most_popular_job_titles
-)
+from modules.common import get_flattened_job_profile_data
+from modules.dataframes_by_title import get_most_popular_job_titles
 
 
 @pytest.fixture

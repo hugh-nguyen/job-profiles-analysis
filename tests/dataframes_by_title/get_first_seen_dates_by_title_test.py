@@ -1,10 +1,8 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, isnull, sum
-from util import (
-    get_flattened_job_profile_data,
-    get_first_seen_dates_by_title
-)
+from modules.common import get_flattened_job_profile_data
+from modules.dataframes_by_title import get_first_seen_dates_by_title
 
 
 @pytest.fixture

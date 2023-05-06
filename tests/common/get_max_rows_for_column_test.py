@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 import pytest
 
-from util import get_max_rows_for_column
+from modules.common import get_max_rows_for_column
 
 @pytest.fixture
 def spark():

@@ -1,10 +1,8 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, isnull, sum
-from util import (
-    get_flattened_job_profile_data,
-    get_average_salaries_by_profile
-)
+from modules.common import get_flattened_job_profile_data
+from modules.dataframes_by_profile import get_average_salary_for_all_profiles
 
 
 @pytest.fixture
@@ -14,55 +12,7 @@ def spark():
     spark.stop()
 
 
-def test_get_average_salaries_by_profile_simple(spark):
-
-    data = [
-        {
-            'id': 'da313',
-            'profile': {
-                'firstName': 'Daniel',
-                'lastName': 'Doe',
-                'jobHistory': [
-                    {
-                        'title': 'dentist',
-                        'location': 'Perth',
-                        'salary': 104000,
-                        'fromDate': '2019-08-08',
-                    },
-                    {
-                        'title': 'dentist',
-                        'location': 'Perth',
-                        'salary': 98000,
-                        'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
-        }
-    ]
-
-    sc = spark.sparkContext
-    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
-    df = get_flattened_job_profile_data(df)
-
-    result = get_average_salaries_by_profile(df)
-
-    expected_data = [
-        {
-            'id': 'da313',
-            'firstName': 'Daniel',
-            'lastName': 'Doe',
-            'avgSalary': 101000.0
-        }
-    ]
-
-    expected = spark.createDataFrame(expected_data, result.schema)
-
-    assert result.subtract(expected).count() == 0
-    assert expected.subtract(result).count() == 0
-
-
-def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
+def test_get_average_salary_for_all_profiles(spark):
 
     data = [
         {
@@ -115,7 +65,7 @@ def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
                     {
                         'title': 'dentist',
                         'location': 'Perth',
-                        'salary': 20000,
+                        'salary': 20010,
                         'fromDate': '2016-02-08',
                         'toDate': '2019-08-08'
                     }
@@ -128,20 +78,11 @@ def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
 
-    result = get_average_salaries_by_profile(df)
+    result = get_average_salary_for_all_profiles(df)
 
     expected_data = [
         {
-            'id': 'da313',
-            'firstName': 'Jane',
-            'lastName': 'Dee',
-            'avgSalary': 33333.33
-        },
-        {
-            'id': 'da314',
-            'firstName': 'John',
-            'lastName': 'Doe',
-            'avgSalary': 16666.67
+            'avgSalary': 25001.67
         }
     ]
 

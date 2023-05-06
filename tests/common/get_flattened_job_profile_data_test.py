@@ -1,7 +1,7 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, isnull, sum
-from util import get_flattened_job_profile_data
+from modules.common import get_flattened_job_profile_data
 
 
 @pytest.fixture

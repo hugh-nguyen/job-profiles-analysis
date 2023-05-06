@@ -1,10 +1,8 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, isnull, sum
-from util import (
-    get_flattened_job_profile_data,
-    get_highest_paying_job_by_profile
-)
+from modules.common import get_flattened_job_profile_data
+from modules.dataframes_by_profile import get_highest_paying_job_by_profile
 
 
 @pytest.fixture
