@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_cdk:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Install pip
+        run: |
+          sudo apt install python3-pip
+          python -m pip install --upgrade pip setuptools wheel
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Install Python Packages
+        run: pip install -r ${{ github.workspace }}/requirements.txt
+
+      - name:
+        run: export PYTHONPATH=${{ github.workspace }} && pytest ${{ github.workspace }}/tests
