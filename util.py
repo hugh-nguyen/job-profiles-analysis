@@ -13,6 +13,7 @@ from pyspark.sql.functions import (
     sum,
     year as get_year
 )
+from pyspark.sql.window import Window
 
 
 def get_flattened_job_profile_data(df):
@@ -117,3 +118,21 @@ def get_most_recent_jobs_by_profile(df):
         .select('id', 'firstName', 'lastName', 'jobDetail')
     
     return result
+
+
+def get_highest_paying_job_by_profile(df):
+
+    result = df.withColumn(
+        'highestSalary',
+        max(col('jobDetail.salary')).over(Window.partitionBy("id"))
+    )
+    result = result.where(col('jobDetail.salary') == col('highestSalary'))
+
+    return result.selectExpr(
+        'id',
+        'firstName',
+        'lastName',
+        'jobDetail.title AS highestPayingJobTitle',
+        'jobDetail.salary AS highestPayingJobSalary',
+        'YEAR(jobDetail.fromDate) AS highestPayingJobYear'
+    )
