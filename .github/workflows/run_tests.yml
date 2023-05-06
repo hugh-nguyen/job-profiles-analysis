@@ -41,5 +41,5 @@ jobs:
       - name: Install Python Packages
         run: pip install -r ${{ github.workspace }}/requirements.txt
 
-      - name: Run Pytests
+      - name: Run Tox/Pytests
         run: export PYTHONPATH=${{ github.workspace }} && tox
