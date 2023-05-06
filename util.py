@@ -11,6 +11,7 @@ from pyspark.sql.functions import (
     sum,
 )
 
+
 def get_flattened_job_profile_data(df):
 
     result = df.select(
@@ -38,7 +39,7 @@ def get_average_salary_for_all_profiles(df):
 
     result = df.agg(avg('jobDetail.salary').alias('avgSalary'))
 
-    result.withColumn('avgSalary', round(result['avgSalary'], 2))
+    result = result.withColumn('avgSalary', round(result['avgSalary'], 2))
 
     return result
 
@@ -58,8 +59,14 @@ def get_current_salaries_by_profile(df):
     result = df.where(isnull(col('jobDetail.toDate'))) \
             .groupBy('id', 'firstName', 'lastName') \
             .agg(sum('jobDetail.salary').alias('currentSalary'))
+
+    result = result.withColumn(
+        'currentSalary',
+        round(result['currentSalary'], 2)
+    )
     
     return result
+
 
 def get_max_rows_for_column(df, column_name):
 
