@@ -63,7 +63,8 @@ def test_get_average_salaries_by_job_title_simple(spark):
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
 
     result = get_average_salaries_by_job_title(df)
@@ -76,8 +77,6 @@ def test_get_average_salaries_by_job_title_simple(spark):
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
-    result.show()
-    expected.show()
 
     assert result.subtract(expected).count() == 0
     assert expected.subtract(result).count() == 0
@@ -151,12 +150,12 @@ def test_get_average_salaries_by_job_title_with_decimal_place_check(spark):
             }
         }
     ]
-
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
 
     result = get_average_salaries_by_job_title(df)
-    result.show()
 
     expected_data = [
         {

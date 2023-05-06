@@ -2,13 +2,16 @@ from pyspark.sql.functions import (
     asc,
     avg,
     col,
+    count as get_count,
     desc,
     explode,
     isnull,
     lower,
+    min,
     max,
     round,
     sum,
+    year as get_year
 )
 
 
@@ -57,8 +60,8 @@ def get_average_salaries_by_job_title(df):
 def get_current_salaries_by_profile(df):
 
     result = df.where(isnull(col('jobDetail.toDate'))) \
-            .groupBy('id', 'firstName', 'lastName') \
-            .agg(sum('jobDetail.salary').alias('currentSalary'))
+        .groupBy('id', 'firstName', 'lastName') \
+        .agg(sum('jobDetail.salary').alias('currentSalary'))
 
     result = result.withColumn(
         'currentSalary',
@@ -74,3 +77,27 @@ def get_max_rows_for_column(df, column_name):
     max_rows = df.filter(col(column_name) == max_value)
 
     return max_rows
+
+
+def get_first_seen_dates_by_title(df):
+
+    result = df.groupBy('jobDetail.title') \
+        .agg(min(col('jobDetail.fromDate')).alias('firstSeenDate'))
+    
+    return result
+
+
+def get_most_popular_job_titles(df, year=None):
+
+    title_first_seen_dates = get_first_seen_dates_by_title(df)
+    if year:
+        title_first_seen_dates = title_first_seen_dates.where(
+            get_year(col('firstSeenDate')) == year
+        )
+    
+    title_counts = df.groupBy('jobDetail.title') \
+        .agg(get_count('jobDetail.title').alias('occurrence'))
+    
+    result = title_first_seen_dates.join(title_counts, 'title', 'inner')
+    
+    return result.orderBy(desc('occurrence'))

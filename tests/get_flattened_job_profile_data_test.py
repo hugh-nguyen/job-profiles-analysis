@@ -32,7 +32,8 @@ def test_flattened_job_profile_data_simple(spark):
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
 
     result = get_flattened_job_profile_data(df)
 
@@ -85,7 +86,8 @@ def test_flattened_job_profile_data_more_profiles(spark):
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
 
     result = get_flattened_job_profile_data(df)
 
@@ -199,7 +201,8 @@ def test_flattened_job_profile_data_more_job_history(spark):
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
 
     result = get_flattened_job_profile_data(df)
 

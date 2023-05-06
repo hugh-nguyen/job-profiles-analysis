@@ -111,7 +111,8 @@ def test_get_current_salaries_by_profile_where_profile_has_no_current_job(spark)
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
     
     result = get_current_salaries_by_profile(df)
@@ -179,7 +180,8 @@ def test_get_current_salaries_by_profile_where_profile_has_multiple_current_jobs
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
     
     result = get_current_salaries_by_profile(df)

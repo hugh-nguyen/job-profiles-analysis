@@ -41,7 +41,8 @@ def test_get_average_salaries_by_profile_simple(spark):
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
 
     result = get_average_salaries_by_profile(df)
@@ -123,7 +124,8 @@ def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
         }
     ]
 
-    df = spark.read.option('inferSchema', 'true').json(spark.sparkContext.parallelize(data))
+    sc = spark.sparkContext
+    df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
 
     result = get_average_salaries_by_profile(df)
