@@ -13,6 +13,8 @@ The report below is the primary artefact for this project, other artefects are l
    * [Run Tests Locally](#run-tests-locally)
    * [Continuous Integration Testing with Github Actions](#continuous-integration-testing-with-github-actions)
    * [Logging](#logging)
+   * [Black Formatting & Pre-commit](#black-formatting--pre-commit)
+   * [Further Work](#further-work)
 
 Local Setup
 ============
@@ -97,3 +99,15 @@ Logging is an extremely part of any data pipeline or analytics
 - It will log everytime a function is started, completed and whenever it fails with a message
 
 ![alt text](/images/logging.png)
+
+
+Black Formatting & Pre-commit
+============
+
+
+
+Further Work
+============
+
+As only so much time could be alotted to this project there are some things that should be added if more time was afforded. The item below would be the first of these
+- Dataframe validation - It would be good to check the schema of the incoming dataframe for all of the functions and raise errors for any inconsistencies

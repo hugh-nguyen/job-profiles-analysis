@@ -13,7 +13,6 @@ def spark():
 
 
 def test_get_first_seen_dates_by_title(spark):
-
     data = [
         {
             'id': 'da313',
@@ -32,9 +31,9 @@ def test_get_first_seen_dates_by_title(spark):
                         'location': 'Perth',
                         'salary': 104000,
                         'fromDate': '2016-08-08',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         },
         {
             'id': 'da314',
@@ -48,8 +47,8 @@ def test_get_first_seen_dates_by_title(spark):
                         'salary': 104000,
                         'fromDate': '2016-01-08',
                     }
-                ]
-            }
+                ],
+            },
         },
         {
             'id': 'da315',
@@ -68,10 +67,10 @@ def test_get_first_seen_dates_by_title(spark):
                         'location': 'Perth',
                         'salary': 104000,
                         'fromDate': '2014-01-08',
-                    }
-                ]
-            }
-        }
+                    },
+                ],
+            },
+        },
     ]
 
     sc = spark.sparkContext
@@ -81,14 +80,8 @@ def test_get_first_seen_dates_by_title(spark):
     result = get_first_seen_dates_by_title(df)
 
     expected_data = [
-        {
-            'title': 'dentist',
-            'firstSeenDate': '2016-01-08'
-        },
-        {
-            'title': 'handy man',
-            'firstSeenDate': '2014-01-08'
-        },
+        {'title': 'dentist', 'firstSeenDate': '2016-01-08'},
+        {'title': 'handy man', 'firstSeenDate': '2014-01-08'},
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)

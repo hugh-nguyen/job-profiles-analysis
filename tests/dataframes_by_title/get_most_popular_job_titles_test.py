@@ -30,9 +30,9 @@ shared_data = [
                     'location': 'Perth',
                     'salary': 104000,
                     'fromDate': '2015-08-08',
-                }
-            ]
-        }
+                },
+            ],
+        },
     },
     {
         'id': 'da314',
@@ -46,8 +46,8 @@ shared_data = [
                     'salary': 104000,
                     'fromDate': '2016-01-08',
                 }
-            ]
-        }
+            ],
+        },
     },
     {
         'id': 'da315',
@@ -79,42 +79,25 @@ shared_data = [
                     'salary': 104000,
                     'fromDate': '2015-01-08',
                 },
-            ]
-        }
-    }
+            ],
+        },
+    },
 ]
 
 
 def test_get_most_popular_job_titles_overall(spark):
-
     data = shared_data
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
 
     result = get_most_popular_job_titles(df)
-    
+
     expected_data = [
-        {
-            'title': 'dentist',
-            'firstSeenDate': '2015-08-08',
-            'occurrence': 3
-        },
-        {
-            'title': 'doctor',
-            'firstSeenDate': '2015-07-08',
-            'occurrence': 2
-        },
-        {
-            'title': 'handy man',
-            'firstSeenDate': '2015-01-08',
-            'occurrence': 1
-        },
-        {
-            'title': 'engineer',
-            'firstSeenDate': '2016-07-08',
-            'occurrence': 1
-        },
+        {'title': 'dentist', 'firstSeenDate': '2015-08-08', 'occurrence': 3},
+        {'title': 'doctor', 'firstSeenDate': '2015-07-08', 'occurrence': 2},
+        {'title': 'handy man', 'firstSeenDate': '2015-01-08', 'occurrence': 1},
+        {'title': 'engineer', 'firstSeenDate': '2016-07-08', 'occurrence': 1},
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
@@ -124,7 +107,6 @@ def test_get_most_popular_job_titles_overall(spark):
 
 
 def test_get_most_popular_job_titles_empty_years(spark):
-
     data = shared_data
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
@@ -144,7 +126,6 @@ def test_get_most_popular_job_titles_empty_years(spark):
 
 
 def test_get_most_popular_job_titles_specific_year(spark):
-
     data = shared_data
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
@@ -153,21 +134,9 @@ def test_get_most_popular_job_titles_specific_year(spark):
     result = get_most_popular_job_titles(df, 2015)
 
     expected_data = [
-        {
-            'title': 'dentist',
-            'firstSeenDate': '2015-08-08',
-            'occurrence': 3
-        },
-        {
-            'title': 'doctor',
-            'firstSeenDate': '2015-07-08',
-            'occurrence': 2
-        },
-        {
-            'title': 'handy man',
-            'firstSeenDate': '2015-01-08',
-            'occurrence': 1
-        },
+        {'title': 'dentist', 'firstSeenDate': '2015-08-08', 'occurrence': 3},
+        {'title': 'doctor', 'firstSeenDate': '2015-07-08', 'occurrence': 2},
+        {'title': 'handy man', 'firstSeenDate': '2015-01-08', 'occurrence': 1},
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
@@ -176,8 +145,9 @@ def test_get_most_popular_job_titles_specific_year(spark):
     assert expected.subtract(result).count() == 0
 
 
-def test_get_most_popular_job_titles_engineer_overrides_dentist_due_to_first_seen(spark):
-
+def test_get_most_popular_job_titles_engineer_overrides_dentist_due_to_first_seen(
+    spark,
+):
     data = shared_data
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
@@ -186,11 +156,7 @@ def test_get_most_popular_job_titles_engineer_overrides_dentist_due_to_first_see
     result = get_most_popular_job_titles(df, 2016)
 
     expected_data = [
-        {
-            'title': 'engineer',
-            'firstSeenDate': '2016-07-08',
-            'occurrence': 1
-        },
+        {'title': 'engineer', 'firstSeenDate': '2016-07-08', 'occurrence': 1},
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)

@@ -1,5 +1,6 @@
 import logging
 
+
 def log(function):
     def wrapper(*args, **kwargs):
         # create logger
@@ -11,7 +12,9 @@ def log(function):
         fh.setLevel(logging.DEBUG)
 
         # create formatter
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
         fh.setFormatter(formatter)
 
         # add the file handler to the logger
@@ -25,4 +28,5 @@ def log(function):
             raise error
         logger.info(f'Finished executing {function.__name__}')
         return result
-    return wrapper 
+
+    return wrapper

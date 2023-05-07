@@ -13,7 +13,6 @@ def spark():
 
 
 def test_get_average_salaries_by_profile_simple(spark):
-
     data = [
         {
             'id': 'da313',
@@ -32,10 +31,10 @@ def test_get_average_salaries_by_profile_simple(spark):
                         'location': 'Perth',
                         'salary': 98000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
         }
     ]
 
@@ -46,12 +45,7 @@ def test_get_average_salaries_by_profile_simple(spark):
     result = get_average_salaries_by_profile(df)
 
     expected_data = [
-        {
-            'id': 'da313',
-            'firstName': 'Daniel',
-            'lastName': 'Doe',
-            'avgSalary': 101000.0
-        }
+        {'id': 'da313', 'firstName': 'Daniel', 'lastName': 'Doe', 'avgSalary': 101000.0}
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
@@ -61,7 +55,6 @@ def test_get_average_salaries_by_profile_simple(spark):
 
 
 def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
-
     data = [
         {
             'id': 'da313',
@@ -80,17 +73,17 @@ def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
                         'location': 'Perth',
                         'salary': 30000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     },
                     {
                         'title': 'dentist',
                         'location': 'Perth',
                         'salary': 50000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
         },
         {
             'id': 'da314',
@@ -115,11 +108,11 @@ def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
                         'location': 'Perth',
                         'salary': 20000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
-        }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
+        },
     ]
 
     sc = spark.sparkContext
@@ -129,18 +122,8 @@ def test_get_average_salaries_by_profile_with_decimal_place_check(spark):
     result = get_average_salaries_by_profile(df)
 
     expected_data = [
-        {
-            'id': 'da313',
-            'firstName': 'Jane',
-            'lastName': 'Dee',
-            'avgSalary': 33333.33
-        },
-        {
-            'id': 'da314',
-            'firstName': 'John',
-            'lastName': 'Doe',
-            'avgSalary': 16666.67
-        }
+        {'id': 'da313', 'firstName': 'Jane', 'lastName': 'Dee', 'avgSalary': 33333.33},
+        {'id': 'da314', 'firstName': 'John', 'lastName': 'Doe', 'avgSalary': 16666.67},
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)

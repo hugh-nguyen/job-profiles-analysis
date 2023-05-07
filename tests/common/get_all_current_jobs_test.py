@@ -1,10 +1,7 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, isnull, sum
-from modules.common import (
-    get_flattened_job_profile_data,
-    get_all_current_jobs
-)
+from modules.common import get_flattened_job_profile_data, get_all_current_jobs
 
 
 @pytest.fixture
@@ -12,6 +9,7 @@ def spark():
     spark = SparkSession.builder.appName('test').getOrCreate()
     yield spark
     spark.stop()
+
 
 base_data = [
     {
@@ -25,15 +23,15 @@ base_data = [
                     'location': 'Perth',
                     'salary': 104000,
                     'fromDate': '2012-08-08',
-                    'toDate': '2019-01-01'
+                    'toDate': '2019-01-01',
                 }
-            ]
-        }
+            ],
+        },
     }
 ]
 
-def test_get_all_current_jobs_one_current_job(spark):
 
+def test_get_all_current_jobs_one_current_job(spark):
     data = base_data + [
         {
             'id': 'da313',
@@ -47,8 +45,8 @@ def test_get_all_current_jobs_one_current_job(spark):
                         'salary': 104000,
                         'fromDate': '2019-08-08',
                     }
-                ]
-            }
+                ],
+            },
         }
     ]
 
@@ -68,7 +66,7 @@ def test_get_all_current_jobs_one_current_job(spark):
                 'location': 'Perth',
                 'salary': 104000,
                 'fromDate': '2019-08-08',
-            }
+            },
         }
     ]
 
@@ -79,7 +77,6 @@ def test_get_all_current_jobs_one_current_job(spark):
 
 
 def test_get_all_current_jobs_no_current_jobs(spark):
-
     data = base_data + [
         {
             'id': 'da313',
@@ -92,10 +89,10 @@ def test_get_all_current_jobs_no_current_jobs(spark):
                         'location': 'Perth',
                         'salary': 104000,
                         'fromDate': '2019-08-08',
-                        'toDate': '2019-09-08'
+                        'toDate': '2019-09-08',
                     }
-                ]
-            }
+                ],
+            },
         }
     ]
 
@@ -111,7 +108,6 @@ def test_get_all_current_jobs_no_current_jobs(spark):
 
 
 def test_get_all_current_jobs_one_current_and_one_previous_job(spark):
-
     data = base_data + [
         {
             'id': 'da313',
@@ -131,9 +127,9 @@ def test_get_all_current_jobs_one_current_and_one_previous_job(spark):
                         'salary': 104000,
                         'fromDate': '2018-08-08',
                         'toDate': '2019-08-08',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }
     ]
 
@@ -153,7 +149,7 @@ def test_get_all_current_jobs_one_current_and_one_previous_job(spark):
                 'location': 'Perth',
                 'salary': 104000,
                 'fromDate': '2019-08-08',
-            }
+            },
         }
     ]
 

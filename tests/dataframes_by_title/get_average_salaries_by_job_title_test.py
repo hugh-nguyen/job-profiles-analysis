@@ -13,7 +13,6 @@ def spark():
 
 
 def test_get_average_salaries_by_job_title_simple(spark):
-
     data = [
         {
             'id': 'da313',
@@ -32,10 +31,10 @@ def test_get_average_salaries_by_job_title_simple(spark):
                         'location': 'Perth',
                         'salary': 98000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
         },
         {
             'id': 'da314',
@@ -54,11 +53,11 @@ def test_get_average_salaries_by_job_title_simple(spark):
                         'location': 'Perth',
                         'salary': 65000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
-        }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
+        },
     ]
 
     sc = spark.sparkContext
@@ -67,12 +66,7 @@ def test_get_average_salaries_by_job_title_simple(spark):
 
     result = get_average_salaries_by_job_title(df)
 
-    expected_data = [
-        {
-            'jobTitle': 'dentist',
-            'avgSalary': 86250.0
-        }
-    ]
+    expected_data = [{'jobTitle': 'dentist', 'avgSalary': 86250.0}]
 
     expected = spark.createDataFrame(expected_data, result.schema)
 
@@ -81,7 +75,6 @@ def test_get_average_salaries_by_job_title_simple(spark):
 
 
 def test_get_average_salaries_by_job_title_with_decimal_place_check(spark):
-
     data = [
         {
             'id': 'da313',
@@ -100,10 +93,10 @@ def test_get_average_salaries_by_job_title_with_decimal_place_check(spark):
                         'location': 'Perth',
                         'salary': 20000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
         },
         {
             'id': 'da314',
@@ -123,8 +116,8 @@ def test_get_average_salaries_by_job_title_with_decimal_place_check(spark):
                         'salary': 30000,
                         'fromDate': '2019-08-08',
                     },
-                ]
-            }
+                ],
+            },
         },
         {
             'id': 'da315',
@@ -144,11 +137,11 @@ def test_get_average_salaries_by_job_title_with_decimal_place_check(spark):
                         'salary': 10000,
                         'fromDate': '2019-08-08',
                     },
-                ]
-            }
-        }
+                ],
+            },
+        },
     ]
-    
+
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
@@ -156,14 +149,8 @@ def test_get_average_salaries_by_job_title_with_decimal_place_check(spark):
     result = get_average_salaries_by_job_title(df)
 
     expected_data = [
-        {
-            'jobTitle': 'dentist',
-            'avgSalary': 33333.33
-        },
-        {
-            'jobTitle': 'doctor',
-            'avgSalary': 16666.67
-        }
+        {'jobTitle': 'dentist', 'avgSalary': 33333.33},
+        {'jobTitle': 'doctor', 'avgSalary': 16666.67},
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)

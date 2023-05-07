@@ -13,7 +13,6 @@ def spark():
 
 
 def test_get_average_salary_for_all_profiles(spark):
-
     data = [
         {
             'id': 'da313',
@@ -32,17 +31,17 @@ def test_get_average_salary_for_all_profiles(spark):
                         'location': 'Perth',
                         'salary': 30000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     },
                     {
                         'title': 'dentist',
                         'location': 'Perth',
                         'salary': 50000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
         },
         {
             'id': 'da314',
@@ -67,11 +66,11 @@ def test_get_average_salary_for_all_profiles(spark):
                         'location': 'Perth',
                         'salary': 20010,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
-        }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
+        },
     ]
 
     sc = spark.sparkContext
@@ -80,11 +79,7 @@ def test_get_average_salary_for_all_profiles(spark):
 
     result = get_average_salary_for_all_profiles(df)
 
-    expected_data = [
-        {
-            'avgSalary': 25001.67
-        }
-    ]
+    expected_data = [{'avgSalary': 25001.67}]
 
     expected = spark.createDataFrame(expected_data, result.schema)
 

@@ -4,6 +4,7 @@ from pyspark.sql.functions import col, isnull, sum
 from modules.common import get_flattened_job_profile_data
 from modules.dataframes_by_profile import get_most_recent_jobs_by_profile
 
+
 @pytest.fixture
 def spark():
     spark = SparkSession.builder.appName('test').getOrCreate()
@@ -23,16 +24,15 @@ base_data = [
                     'location': 'Perth',
                     'salary': 104000,
                     'fromDate': '2012-08-08',
-                    'toDate': '2019-01-01'
+                    'toDate': '2019-01-01',
                 }
-            ]
-        }
+            ],
+        },
     }
 ]
 
 
 def test_get_most_recent_jobs_by_profile_with_one_current_job(spark):
-
     data = base_data + [
         {
             'id': 'da313',
@@ -46,8 +46,8 @@ def test_get_most_recent_jobs_by_profile_with_one_current_job(spark):
                         'salary': 104000,
                         'fromDate': '2019-08-08',
                     }
-                ]
-            }
+                ],
+            },
         }
     ]
 
@@ -67,8 +67,8 @@ def test_get_most_recent_jobs_by_profile_with_one_current_job(spark):
                 'location': 'Perth',
                 'salary': 104000,
                 'fromDate': '2012-08-08',
-                'toDate': '2019-01-01'
-            }
+                'toDate': '2019-01-01',
+            },
         },
         {
             'id': 'da313',
@@ -79,8 +79,8 @@ def test_get_most_recent_jobs_by_profile_with_one_current_job(spark):
                 'location': 'Perth',
                 'salary': 104000,
                 'fromDate': '2019-08-08',
-            }
-        }
+            },
+        },
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
@@ -90,7 +90,6 @@ def test_get_most_recent_jobs_by_profile_with_one_current_job(spark):
 
 
 def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs(spark):
-
     data = base_data + [
         {
             'id': 'da313',
@@ -109,9 +108,9 @@ def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs(spark):
                         'location': 'Perth',
                         'salary': 104000,
                         'fromDate': '2019-07-08',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }
     ]
 
@@ -131,8 +130,8 @@ def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs(spark):
                 'location': 'Perth',
                 'salary': 104000,
                 'fromDate': '2012-08-08',
-                'toDate': '2019-01-01'
-            }
+                'toDate': '2019-01-01',
+            },
         },
         {
             'id': 'da313',
@@ -143,8 +142,8 @@ def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs(spark):
                 'location': 'Perth',
                 'salary': 104000,
                 'fromDate': '2019-08-08',
-            }
-        }
+            },
+        },
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
@@ -153,8 +152,9 @@ def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs(spark):
     assert expected.subtract(result).count() == 0
 
 
-def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs_single_finsished_job(spark):
-
+def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs_single_finsished_job(
+    spark,
+):
     data = base_data + [
         {
             'id': 'da313',
@@ -180,9 +180,9 @@ def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs_single_finsi
                         'location': 'Perth',
                         'salary': 104000,
                         'fromDate': '2019-07-08',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }
     ]
 
@@ -202,8 +202,8 @@ def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs_single_finsi
                 'location': 'Perth',
                 'salary': 104000,
                 'fromDate': '2012-08-08',
-                'toDate': '2019-01-01'
-            }
+                'toDate': '2019-01-01',
+            },
         },
         {
             'id': 'da313',
@@ -215,8 +215,8 @@ def test_get_most_recent_jobs_by_profile_with_multiple_current_jobs_single_finsi
                 'salary': 104000,
                 'fromDate': '2019-09-08',
                 'toDate': '2019-09-08',
-            }
-        }
+            },
+        },
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)

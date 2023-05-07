@@ -13,7 +13,6 @@ def spark():
 
 
 def test_get_highest_paying_job_by_profile(spark):
-
     data = [
         {
             'id': 'da313',
@@ -38,9 +37,9 @@ def test_get_highest_paying_job_by_profile(spark):
                         'location': 'Perth',
                         'salary': 44000,
                         'fromDate': '2017-08-08',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }
     ]
 
@@ -57,7 +56,7 @@ def test_get_highest_paying_job_by_profile(spark):
             'lastName': 'Doe',
             'highestPayingJobTitle': 'dentist',
             'highestPayingJobSalary': 104000,
-            'highestPayingJobYear': 2018
+            'highestPayingJobYear': 2018,
         }
     ]
 
@@ -68,7 +67,6 @@ def test_get_highest_paying_job_by_profile(spark):
 
 
 def test_get_highest_paying_job_by_profile_multiple_highest_salaries(spark):
-
     data = [
         {
             'id': 'da313',
@@ -93,16 +91,16 @@ def test_get_highest_paying_job_by_profile_multiple_highest_salaries(spark):
                         'location': 'Perth',
                         'salary': 44000,
                         'fromDate': '2017-08-08',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }
     ]
 
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
     df = get_flattened_job_profile_data(df)
-    
+
     result = get_highest_paying_job_by_profile(df)
     result.show()
 
@@ -113,7 +111,7 @@ def test_get_highest_paying_job_by_profile_multiple_highest_salaries(spark):
             'lastName': 'Doe',
             'highestPayingJobTitle': 'senior dentist',
             'highestPayingJobSalary': 104000,
-            'highestPayingJobYear': 2019
+            'highestPayingJobYear': 2019,
         },
         {
             'id': 'da313',
@@ -121,8 +119,8 @@ def test_get_highest_paying_job_by_profile_multiple_highest_salaries(spark):
             'lastName': 'Doe',
             'highestPayingJobTitle': 'dentist',
             'highestPayingJobSalary': 104000,
-            'highestPayingJobYear': 2018
-        }
+            'highestPayingJobYear': 2018,
+        },
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)

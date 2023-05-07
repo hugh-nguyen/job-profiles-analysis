@@ -1,12 +1,6 @@
 from modules.decorators import log
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import (
-    col,
-    explode,
-    isnull,
-    max,
-    year as get_year
-)
+from pyspark.sql.functions import col, explode, isnull, max, year as get_year
 
 
 @log
@@ -34,7 +28,7 @@ def get_flattened_job_profile_data(df: DataFrame) -> DataFrame:
         'id',
         col('profile.firstName').alias('firstName'),
         col('profile.lastName').alias('lastName'),
-        explode('profile.jobHistory').alias('jobDetail')
+        explode('profile.jobHistory').alias('jobDetail'),
     )
 
     return result
@@ -54,4 +48,3 @@ def get_max_rows_for_column(df, column_name):
     max_rows = df.filter(col(column_name) == max_value)
 
     return max_rows
-

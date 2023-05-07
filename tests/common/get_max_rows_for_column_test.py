@@ -4,27 +4,19 @@ import pytest
 
 from modules.common import get_max_rows_for_column
 
+
 @pytest.fixture
 def spark():
     spark = SparkSession.builder.appName('test').getOrCreate()
     yield spark
     spark.stop()
 
-def test_get_max_rows_for_age_column_simple(spark):
 
+def test_get_max_rows_for_age_column_simple(spark):
     data = [
-        {
-            'Name': 'John',
-            'Age': 30
-        },
-        {
-            'Name': 'Alice',
-            'Age': 35
-        },
-        {
-            'Name': 'Emma',
-            'Age': 28
-        },
+        {'Name': 'John', 'Age': 30},
+        {'Name': 'Alice', 'Age': 35},
+        {'Name': 'Emma', 'Age': 28},
     ]
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
@@ -33,10 +25,7 @@ def test_get_max_rows_for_age_column_simple(spark):
     result.show()
 
     expected_data = [
-        {
-            'Name': 'Alice',
-            'Age': 35
-        },
+        {'Name': 'Alice', 'Age': 35},
     ]
     expected = spark.createDataFrame(expected_data, result.schema)
 
@@ -44,28 +33,12 @@ def test_get_max_rows_for_age_column_simple(spark):
 
 
 def test_get_max_rows_for_age_column_multiple_max_vals(spark):
-
     data = [
-        {
-            'Name': 'John',
-            'Age': 30
-        },
-        {
-            'Name': 'Alice',
-            'Age': 35
-        },
-        {
-            'Name': 'Cassie',
-            'Age': 35
-        },
-        {
-            'Name': 'Bob',
-            'Age': 35
-        },
-        {
-            'Name': 'Emma',
-            'Age': 28
-        },
+        {'Name': 'John', 'Age': 30},
+        {'Name': 'Alice', 'Age': 35},
+        {'Name': 'Cassie', 'Age': 35},
+        {'Name': 'Bob', 'Age': 35},
+        {'Name': 'Emma', 'Age': 28},
     ]
     sc = spark.sparkContext
     df = spark.read.option('inferSchema', 'true').json(sc.parallelize(data))
@@ -74,18 +47,9 @@ def test_get_max_rows_for_age_column_multiple_max_vals(spark):
     result.show()
 
     expected_data = [
-        {
-            'Name': 'Alice',
-            'Age': 35
-        },
-        {
-            'Name': 'Cassie',
-            'Age': 35
-        },
-        {
-            'Name': 'Bob',
-            'Age': 35
-        },
+        {'Name': 'Alice', 'Age': 35},
+        {'Name': 'Cassie', 'Age': 35},
+        {'Name': 'Bob', 'Age': 35},
     ]
     expected = spark.createDataFrame(expected_data, result.schema)
 

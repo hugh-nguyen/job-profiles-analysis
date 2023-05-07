@@ -20,9 +20,11 @@ def get_average_salaries_by_profile(df: DataFrame) -> DataFrame:
     Returns:
         DataFrame: DataFrame with average salaries grouped by profile.
     """
-    result = df.groupBy('id', 'firstName', 'lastName') \
-        .agg(avg('jobDetail.salary').alias('avgSalary')) \
+    result = (
+        df.groupBy('id', 'firstName', 'lastName')
+        .agg(avg('jobDetail.salary').alias('avgSalary'))
         .orderBy('avgSalary')
+    )
 
     result = result.withColumn('avgSalary', round(result['avgSalary'], 2))
 
@@ -55,15 +57,14 @@ def get_current_salaries_by_profile(df: DataFrame) -> DataFrame:
     Returns:
         DataFrame: DataFrame with rows containing the maximum value for the given column.
     """
-    result = df.where(isnull(col('jobDetail.toDate'))) \
-        .groupBy('id', 'firstName', 'lastName') \
+    result = (
+        df.where(isnull(col('jobDetail.toDate')))
+        .groupBy('id', 'firstName', 'lastName')
         .agg(sum('jobDetail.salary').alias('currentSalary'))
-
-    result = result.withColumn(
-        'currentSalary',
-        round(result['currentSalary'], 2)
     )
-    
+
+    result = result.withColumn('currentSalary', round(result['currentSalary'], 2))
+
     return result
 
 
@@ -77,8 +78,7 @@ def get_highest_paying_job_by_profile(df: DataFrame) -> DataFrame:
         DataFrame: DataFrame with the highest paying job for each profile.
     """
     result = df.withColumn(
-        'highestSalary',
-        max(col('jobDetail.salary')).over(Window.partitionBy("id"))
+        'highestSalary', max(col('jobDetail.salary')).over(Window.partitionBy("id"))
     )
     result = result.where(col('jobDetail.salary') == col('highestSalary'))
 
@@ -88,7 +88,7 @@ def get_highest_paying_job_by_profile(df: DataFrame) -> DataFrame:
         'lastName',
         'jobDetail.title AS highestPayingJobTitle',
         'jobDetail.salary AS highestPayingJobSalary',
-        'YEAR(jobDetail.fromDate) AS highestPayingJobYear'
+        'YEAR(jobDetail.fromDate) AS highestPayingJobYear',
     )
 
 
@@ -101,13 +101,12 @@ def get_most_recent_jobs_by_profile(df: DataFrame) -> DataFrame:
     Returns:
         DataFrame: DataFrame with the most recent jobs for each profile.
     """
-    df_max_dates = df.groupBy('id') \
-        .agg(max('jobDetail.fromDate').alias('maxFromDate'))
+    df_max_dates = df.groupBy('id').agg(max('jobDetail.fromDate').alias('maxFromDate'))
 
-    result = df.join(df_max_dates, on=['id']) \
-        .where(col('jobDetail.fromDate') == col('maxFromDate')) \
+    result = (
+        df.join(df_max_dates, on=['id'])
+        .where(col('jobDetail.fromDate') == col('maxFromDate'))
         .select('id', 'firstName', 'lastName', 'jobDetail')
+    )
 
     return result
-
-

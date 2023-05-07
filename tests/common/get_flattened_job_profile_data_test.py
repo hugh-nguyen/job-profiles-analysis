@@ -12,7 +12,6 @@ def spark():
 
 
 def test_flattened_job_profile_data_simple(spark):
-    
     data = [
         {
             'id': 'da313',
@@ -25,10 +24,10 @@ def test_flattened_job_profile_data_simple(spark):
                         'location': 'Perth',
                         'salary': 103000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     }
-                ]
-            }
+                ],
+            },
         }
     ]
 
@@ -47,8 +46,8 @@ def test_flattened_job_profile_data_simple(spark):
                 'location': 'Perth',
                 'salary': 103000,
                 'fromDate': '2016-02-08',
-                'toDate': '2019-08-08'
-            }
+                'toDate': '2019-08-08',
+            },
         }
     ]
 
@@ -59,7 +58,6 @@ def test_flattened_job_profile_data_simple(spark):
 
 
 def test_flattened_job_profile_data_more_profiles(spark):
-    
     data = [
         {
             'id': 'da313',
@@ -72,17 +70,17 @@ def test_flattened_job_profile_data_more_profiles(spark):
                         'location': 'Perth',
                         'salary': 103000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     },
                     {
                         'title': 'dentist',
                         'location': 'Melbourne',
                         'salary': 113000,
                         'fromDate': '2014-02-08',
-                        'toDate': '2016-01-08'
-                    }
-                ]
-            }
+                        'toDate': '2016-01-08',
+                    },
+                ],
+            },
         }
     ]
 
@@ -101,8 +99,8 @@ def test_flattened_job_profile_data_more_profiles(spark):
                 'location': 'Perth',
                 'salary': 103000,
                 'fromDate': '2016-02-08',
-                'toDate': '2019-08-08'
-            }
+                'toDate': '2019-08-08',
+            },
         },
         {
             'id': 'da313',
@@ -113,9 +111,9 @@ def test_flattened_job_profile_data_more_profiles(spark):
                 'location': 'Melbourne',
                 'salary': 113000,
                 'fromDate': '2014-02-08',
-                'toDate': '2016-01-08'
-            }
-        }
+                'toDate': '2016-01-08',
+            },
+        },
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
@@ -128,7 +126,6 @@ def test_flattened_job_profile_data_more_profiles(spark):
 
 
 def test_flattened_job_profile_data_more_job_history(spark):
-    
     data = [
         {
             'id': 'da313',
@@ -141,17 +138,17 @@ def test_flattened_job_profile_data_more_job_history(spark):
                         'location': 'Perth',
                         'salary': 103000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     },
                     {
                         'title': 'dentist',
                         'location': 'Melbourne',
                         'salary': 113000,
                         'fromDate': '2014-02-08',
-                        'toDate': '2016-01-08'
-                    }
-                ]
-            }
+                        'toDate': '2016-01-08',
+                    },
+                ],
+            },
         },
         {
             'id': 'da314',
@@ -164,10 +161,10 @@ def test_flattened_job_profile_data_more_job_history(spark):
                         'location': 'Perth',
                         'salary': 111000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     }
-                ]
-            }
+                ],
+            },
         },
         {
             'id': 'da315',
@@ -180,25 +177,25 @@ def test_flattened_job_profile_data_more_job_history(spark):
                         'location': 'Perth',
                         'salary': 111000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     },
                     {
                         'title': 'engineer',
                         'location': 'Perth',
                         'salary': 1121000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
+                        'toDate': '2019-08-08',
                     },
                     {
                         'title': 'anchor',
                         'location': 'Perth',
                         'salary': 115000,
                         'fromDate': '2016-02-08',
-                        'toDate': '2019-08-08'
-                    }
-                ]
-            }
-        }
+                        'toDate': '2019-08-08',
+                    },
+                ],
+            },
+        },
     ]
 
     sc = spark.sparkContext
@@ -216,8 +213,8 @@ def test_flattened_job_profile_data_more_job_history(spark):
                 'location': 'Perth',
                 'salary': 103000,
                 'fromDate': '2016-02-08',
-                'toDate': '2019-08-08'
-            }
+                'toDate': '2019-08-08',
+            },
         },
         {
             'id': 'da313',
@@ -228,8 +225,8 @@ def test_flattened_job_profile_data_more_job_history(spark):
                 'location': 'Melbourne',
                 'salary': 113000,
                 'fromDate': '2014-02-08',
-                'toDate': '2016-01-08'
-            }
+                'toDate': '2016-01-08',
+            },
         },
         {
             'id': 'da314',
@@ -240,8 +237,8 @@ def test_flattened_job_profile_data_more_job_history(spark):
                 'location': 'Perth',
                 'salary': 111000,
                 'fromDate': '2016-02-08',
-                'toDate': '2019-08-08'
-            }
+                'toDate': '2019-08-08',
+            },
         },
         {
             'id': 'da315',
@@ -252,8 +249,8 @@ def test_flattened_job_profile_data_more_job_history(spark):
                 'location': 'Perth',
                 'salary': 111000,
                 'fromDate': '2016-02-08',
-                'toDate': '2019-08-08'
-            }
+                'toDate': '2019-08-08',
+            },
         },
         {
             'id': 'da315',
@@ -264,8 +261,8 @@ def test_flattened_job_profile_data_more_job_history(spark):
                 'location': 'Perth',
                 'salary': 1121000,
                 'fromDate': '2016-02-08',
-                'toDate': '2019-08-08'
-            }
+                'toDate': '2019-08-08',
+            },
         },
         {
             'id': 'da315',
@@ -276,9 +273,9 @@ def test_flattened_job_profile_data_more_job_history(spark):
                 'location': 'Perth',
                 'salary': 115000,
                 'fromDate': '2016-02-08',
-                'toDate': '2019-08-08'
-            }
-        }
+                'toDate': '2019-08-08',
+            },
+        },
     ]
 
     expected = spark.createDataFrame(expected_data, result.schema)
