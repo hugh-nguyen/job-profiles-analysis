@@ -20,12 +20,8 @@ Local Setup
 Assumed prequisites
 - Docker is installed (preferbly newer than version 23.0.5)
 
-Create test_data directory, download the data into this directory and unzip it
-```
-mkdir test_data
-```
-
-The unzipped data should appear as below
+Download the data into the test_data directory and unzip it
+- The unzipped data should appear as below
 
 ![alt text](/images/test-data-file-structure.png)
 
