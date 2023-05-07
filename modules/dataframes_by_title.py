@@ -1,3 +1,4 @@
+from modules.decorators import log
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     avg,
@@ -11,6 +12,7 @@ from pyspark.sql.functions import (
 )
 
 
+@log
 def get_average_salaries_by_job_title(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with average salaries grouped by job title.
@@ -27,6 +29,7 @@ def get_average_salaries_by_job_title(df: DataFrame) -> DataFrame:
     return result
 
 
+@log
 def get_first_seen_dates_by_title(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with the first seen dates for each job title.
@@ -41,6 +44,7 @@ def get_first_seen_dates_by_title(df: DataFrame) -> DataFrame:
     return result
 
 
+@log
 def get_most_popular_job_titles(df: DataFrame, year: int = None) -> DataFrame:
     """
     Returns a DataFrame with the most popular job titles, optionally filtered by year.

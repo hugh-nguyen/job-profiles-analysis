@@ -1,3 +1,4 @@
+from modules.decorators import log
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     avg,
@@ -10,6 +11,7 @@ from pyspark.sql.functions import (
 from pyspark.sql.window import Window
 
 
+@log
 def get_average_salaries_by_profile(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with average salaries grouped by profile.
@@ -27,6 +29,7 @@ def get_average_salaries_by_profile(df: DataFrame) -> DataFrame:
     return result
 
 
+@log
 def get_average_salary_for_all_profiles(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with the average salary for all profiles.
@@ -42,6 +45,7 @@ def get_average_salary_for_all_profiles(df: DataFrame) -> DataFrame:
     return result
 
 
+@log
 def get_current_salaries_by_profile(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with current salaries grouped by profile.
@@ -63,6 +67,7 @@ def get_current_salaries_by_profile(df: DataFrame) -> DataFrame:
     return result
 
 
+@log
 def get_highest_paying_job_by_profile(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with the highest paying job for each profile.
@@ -87,6 +92,7 @@ def get_highest_paying_job_by_profile(df: DataFrame) -> DataFrame:
     )
 
 
+@log
 def get_most_recent_jobs_by_profile(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with the most recent jobs for each profile.

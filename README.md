@@ -12,6 +12,7 @@ The report below is the primary artefact for this project, other artefects are l
    * [Local Setup](#local-setup)
    * [Run Tests Locally](#run-tests-locally)
    * [Continuous Integration Testing with Github Actions](#continuous-integration-testing-with-github-actions)
+   * [Logging](#logging)
 
 Local Setup
 ============
@@ -63,7 +64,15 @@ Add the current directory to the PYTHONPATH by running the command below
 export PYTHONPATH=$PYTHONPATH:${PWD}
 ```
 
+Setup a python virtual environment & install python packages
+```
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
 To run the tests simply run the command below
+- Keep in mind that the first time you run this it can take some because Tox will setup an individual virtual environment for each version of python and install packages to each of them
 ```
 tox
 ```
@@ -82,3 +91,13 @@ You can view the results here
 The action sets up a linux server with Spark and python 3.7, 3.8, 3.9, 3.10 and runs all of the tests with tox
 
 ![alt text](/images/tox-github.png)
+
+
+Logging
+============
+
+Logging is an extremely part of any data pipeline or analytics
+- A simple logging decorator has been setup to write to the logs directory
+- It will log everytime a function is started, completed and whenever it fails with a message
+
+![alt text](/images/logging.png)

@@ -1,3 +1,4 @@
+from modules.decorators import log
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     col,
@@ -8,6 +9,7 @@ from pyspark.sql.functions import (
 )
 
 
+@log
 def get_all_current_jobs(df: DataFrame) -> DataFrame:
     """
     Returns a DataFrame with all current jobs (where 'toDate' is null).
@@ -19,6 +21,7 @@ def get_all_current_jobs(df: DataFrame) -> DataFrame:
     return df.where(isnull(col('jobDetail.toDate')))
 
 
+@log
 def get_flattened_job_profile_data(df: DataFrame) -> DataFrame:
     """
     Flatten job profile data for further processing.
@@ -37,6 +40,7 @@ def get_flattened_job_profile_data(df: DataFrame) -> DataFrame:
     return result
 
 
+@log
 def get_max_rows_for_column(df, column_name):
     """
     Returns a DataFrame with the max row for a column, if there are ties

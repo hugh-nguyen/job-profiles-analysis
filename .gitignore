@@ -162,3 +162,4 @@ cython_debug/
 test_data
 output_data
 .DS_Store
+logs
