@@ -104,6 +104,10 @@ Logging is an extremely part of any data pipeline or analytics
 Black Formatting & Pre-commit
 ============
 
+A pre-commit has been configured to use black to format all the necessary files before committing
+- You can find the config for this here - [Black Config](/.pre-commit-config.yaml)
+
+![alt text](/images/black.png)
 
 
 Further Work
